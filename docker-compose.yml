@@ -1,0 +1,24 @@
+services:
+  mi-servicio-apache:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jwt-app-apache
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    volumes:
+      - .:/var/www/html
+
+  kali-client: # Servicio Kali Linux modificado
+    build:
+      context: . # Directorio donde se encuentra kali.Dockerfile
+      dockerfile: kali.Dockerfile # Especifica el nuevo Dockerfile para Kali
+    container_name: jwt-kali-client
+    # Ya no necesitamos stdin_open y tty si mitmdump es el proceso principal.
+    # Los logs de mitmdump mostrarán el tráfico.
+    # Si aún quieres poder hacer 'exec' fácilmente, puedes dejarlos,
+    # pero mitmdump correrá en primer plano.
+    # stdin_open: true
+    # tty: true
+    restart: unless-stopped
